@@ -5,90 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Surprise 7 mois ❤️</title>
 <style>
-html, body {margin:0; padding:0; background:black; overflow:hidden; font-family:Arial,sans-serif;}
-button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font-size:1.5rem;}
-#startButton, #step1Button, #step2Button {position:fixed; top:0; left:0; width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; font-size:2rem; z-index:10; background:black; color:white;}
-#videoContainer {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:5;}
-#imageScreen {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; color:white; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:2rem; z-index:8;}
-#imageScreen img {width:70vw; max-width:350px;}
-#finalPage {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; padding:20px; color:white; overflow-y:auto; font-size:1.2rem; line-height:1.5;}
+html, body {margin:0; padding:0; background:black; font-family:Arial,sans-serif; color:white;}
+button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font-size:1.5rem; margin-top:20px;}
+#startButton, #step1Button, #step2Button {display:flex; justify-content:center; align-items:center; height:100vh;}
+#videoWindow {display:none; margin:50px auto; width:90%; max-width:600px; border:2px solid white; border-radius:10px;}
+#imageScreen {display:none; text-align:center;}
+#imageScreen img {width:70vw; max-width:350px; transition:transform 3s;}
+#finalPage {display:none; padding:20px; line-height:1.5; overflow-y:auto; max-height:90vh;}
 </style>
 </head>
 <body>
 
+<!-- Étape 0 : démarrage -->
 <div id="startButton"><button>Commencer la surprise</button></div>
 
-<div id="videoContainer"></div>
-<div id="step1Button" style="display:none;"><button>Passer à l'image</button></div>
+<!-- Étape 1 : vidéo -->
+<div id="videoWindow">
+  <video id="video" playsinline controls>
+    <source src="lole.mp4" type="video/mp4">
+  </video>
+</div>
+<div id="step1Button" style="display:none; text-align:center;"><button>Passer à l'image</button></div>
 
+<!-- Étape 2 : image + son -->
 <div id="imageScreen">
-  <img src="lalo.jpeg" id="laloImg">
+  <img src="lalo.jpeg" id="laloImg"><br>
   <div>Joyeux 7 mois mon ange ❤️</div>
-  <div id="step2Button" style="margin-top:20px; display:none;"><button>Passer au texte final</button></div>
+  <button id="step2Button" style="display:none;">Passer au texte final</button>
 </div>
 
+<!-- Étape 3 : texte final -->
 <div id="finalPage"></div>
 
 <script>
 const startButton = document.querySelector("#startButton button");
 const step1Button = document.querySelector("#step1Button button");
-const step2Button = document.querySelector("#step2Button button");
-const videoContainer = document.getElementById("videoContainer");
+const step2Button = document.getElementById("step2Button");
+const videoWindow = document.getElementById("videoWindow");
+const video = document.getElementById("video");
 const imageScreen = document.getElementById("imageScreen");
 const laloImg = document.getElementById("laloImg");
 const finalPage = document.getElementById("finalPage");
 
-let videoEl, leloAudio, malocouilleAudio;
+let leloAudio, malocouilleAudio;
 
-// Étape 0 : lancement de la vidéo
+// --- Étape 0 : démarrage ---
 startButton.onclick = () => {
   document.getElementById("startButton").style.display = "none";
-
-  // Créer un élément video dynamique
-  videoEl = document.createElement('video');
-  videoEl.src = "lole.mp4";
-  videoEl.style.width = "100%";
-  videoEl.style.height = "100%";
-  videoEl.style.objectFit = "cover";
-  videoEl.setAttribute('playsinline','true');
-  videoEl.autoplay = true;
-  videoEl.controls = false;
-  videoContainer.appendChild(videoEl);
-  videoContainer.style.display = "block";
-  videoEl.play().catch(e=>console.log("Erreur vidéo:", e));
-
-  // Afficher bouton pour passer à l'image
-  document.getElementById("step1Button").style.display = "flex";
+  videoWindow.style.display = "block";
+  step1Button.style.display = "block";
+  video.play().catch(e=>console.log("Erreur vidéo:", e));
 };
 
-// Étape 1 : vidéo → image
+// --- Étape 1 : vidéo → image ---
 step1Button.onclick = () => {
-  // Supprimer la vidéo pour qu'iOS libère le son
-  if(videoEl){
-    videoEl.pause();
-    videoEl.src = "";
-    videoEl.load();
-    videoContainer.removeChild(videoEl);
-    videoContainer.style.display = "none";
-  }
-  document.getElementById("step1Button").style.display = "none";
+  video.pause();
+  videoWindow.style.display = "none";
+  step1Button.style.display = "none";
 
-  // Afficher image + lancer le son lelo.mp3
-  imageScreen.style.display = "flex";
-  laloImg.style.transform = "scale(1.5)";
+  // Étape image + son
+  imageScreen.style.display = "block";
+  laloImg.style.transform = "scale(1.2)";
 
   leloAudio = new Audio('lelo.mp3');
   leloAudio.loop = true;
   leloAudio.play().catch(e=>console.log("Erreur lelo:", e));
 
-  // Afficher bouton pour passer au texte final
-  document.getElementById("step2Button").style.display = "block";
+  step2Button.style.display = "inline-block";
 };
 
-// Étape 2 : image → texte final
+// --- Étape 2 : image → texte final ---
 step2Button.onclick = () => {
   imageScreen.style.display = "none";
-  document.getElementById("step2Button").style.display = "none";
+  step2Button.style.display = "none";
   if(leloAudio) leloAudio.pause();
 
   finalPage.style.display = "block";
@@ -98,7 +87,7 @@ step2Button.onclick = () => {
 
   finalPage.innerHTML = `
 Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
-Ça fait dé-dé-déjàaaaa 7 moiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
+Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
 Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.<br><br>
 Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été, à regarder les étoiles à travers tes yeux.<br><br>
 Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge.<br><br>
