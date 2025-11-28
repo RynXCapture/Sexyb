@@ -7,10 +7,11 @@
 <style>
 html, body {margin:0; padding:0; background:black; font-family:Arial,sans-serif; color:white;}
 button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font-size:1.5rem; margin-top:20px;}
-#startButton, #step1Button, #step2Button {display:flex; justify-content:center; align-items:center; height:100vh;}
-#videoWindow {display:none; margin:50px auto; width:90%; max-width:600px; border:2px solid white; border-radius:10px;}
+#startButton, #step1Button, #step2Button, #step3Button {display:flex; justify-content:center; align-items:center; height:100vh;}
+#videoWindow {display:none; margin:20px auto; width:90%; max-width:600px; border:2px solid white; border-radius:10px;}
 #imageScreen {display:none; text-align:center;}
-#imageScreen img {width:70vw; max-width:350px; transition:transform 3s;}
+#imageScreen img {width:70vw; max-width:350px; transition: transform 5s;}
+#imageScreen div {font-size:1.5rem; margin-top:10px; transition: transform 5s;}
 #finalPage {display:none; padding:20px; line-height:1.5; overflow-y:auto; max-height:90vh;}
 </style>
 </head>
@@ -32,39 +33,45 @@ button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font
 <!-- Étape 2 : image + son -->
 <div id="imageScreen">
   <img src="lalo.jpeg" id="laloImg"><br>
-  <div>Joyeux 7 mois mon ange ❤️</div>
+  <div id="imageText" style="opacity:0; transform: scale(0.8);">Joyeux 7 mois mon ange ❤️</div>
   <button id="step2Button" style="display:none;">Passer au texte final</button>
 </div>
 
 <!-- Étape 3 : texte final -->
-<div id="finalPage"></div>
+<div id="finalPage">
+  <button id="step3Button" style="display:none;">Afficher le texte final</button>
+  <div id="finalText" style="display:none;"></div>
+</div>
 
 <script>
 const startButton = document.querySelector("#startButton button");
 const step1ButtonDiv = document.getElementById("step1Button");
 const step1Button = step1ButtonDiv.querySelector("button");
 const step2Button = document.getElementById("step2Button");
+const step3Button = document.getElementById("step3Button");
 const videoWindow = document.getElementById("videoWindow");
 const video = document.getElementById("video");
 const imageScreen = document.getElementById("imageScreen");
 const laloImg = document.getElementById("laloImg");
+const imageText = document.getElementById("imageText");
 const finalPage = document.getElementById("finalPage");
+const finalText = document.getElementById("finalText");
 
 let sonVideo, leloAudio, malocouilleAudio;
 
 // --- Étape 0 : démarrage ---
 startButton.onclick = () => {
-  document.getElementById("startButton").style.display = "none";
+  startButton.parentElement.style.display = "none";
   videoWindow.style.display = "block";
 
-  // Lancer la vidéo muette
+  // Vidéo muette
   video.play().catch(e=>console.log("Erreur vidéo:", e));
 
-  // Lancer le son séparé
+  // Son séparé
   sonVideo = new Audio('son.mp3');
   sonVideo.play().catch(e=>console.log("Erreur son vidéo:", e));
 
-  // Afficher le bouton automatiquement après 10 secondes
+  // Afficher le bouton après 10 secondes
   setTimeout(() => {
     step1Button.style.opacity = "1";
     step1Button.style.pointerEvents = "auto";
@@ -73,20 +80,24 @@ startButton.onclick = () => {
 
 // --- Étape 1 : vidéo → image ---
 step1Button.onclick = () => {
-  // Stopper vidéo et son
   video.pause();
   if(sonVideo) sonVideo.pause();
 
   videoWindow.style.display = "none";
   step1ButtonDiv.style.display = "none";
 
-  // Étape image + son lelo
+  // Affichage image + texte et son
   imageScreen.style.display = "block";
-  laloImg.style.transform = "scale(1.2)";
 
   leloAudio = new Audio('lelo.mp3');
   leloAudio.loop = true;
   leloAudio.play().catch(e=>console.log("Erreur lelo:", e));
+
+  // Faire apparaître le texte avec zoom
+  setTimeout(() => {
+    imageText.style.opacity = "1";
+    imageText.style.transform = "scale(1.2)";
+  }, 100);
 
   step2Button.style.display = "inline-block";
 };
@@ -98,11 +109,18 @@ step2Button.onclick = () => {
   if(leloAudio) leloAudio.pause();
 
   finalPage.style.display = "block";
+  step3Button.style.display = "inline-block";
+};
+
+// --- Étape 3 : afficher texte final + son ---
+step3Button.onclick = () => {
+  step3Button.style.display = "none";
 
   malocouilleAudio = new Audio('malocouille.mp3');
   malocouilleAudio.play().catch(e=>console.log("Erreur malocouille:", e));
 
-  finalPage.innerHTML = `
+  finalText.style.display = "block";
+  finalText.innerHTML = `
 Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
 Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
 Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.<br><br>
