@@ -23,7 +23,8 @@ button {
 #videoWindow video {width:90%; max-width:600px; border:2px solid white; border-radius:10px;}
 #imageScreen img {width:70vw; max-width:350px; transition: transform 5s;}
 #imageScreen div {font-size:1.5rem; margin-top:10px; transition: transform 5s, opacity 2s;}
-#finalText {display:block; text-align:left; line-height:1.5; max-height:70vh; overflow-y:auto; margin-top:20px;}
+#finalText {display:block; text-align:left; line-height:1.5; max-height:60vh; overflow-y:auto; margin-top:20px;}
+audio {margin-top:20px; width:90%;}
 </style>
 </head>
 <body>
@@ -50,7 +51,10 @@ button {
 
 <!-- Étape 3 : texte final -->
 <div id="finalPage" class="screen">
-  <button id="playMusicBtn">Écouter la musique</button>
+  <audio id="finalAudio" controls>
+    <source src="malocouille.mp3" type="audio/mpeg">
+    Votre navigateur ne supporte pas l’élément audio.
+  </audio>
   <div id="finalText">
     Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
     Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
@@ -79,10 +83,9 @@ const laloImg = document.getElementById("laloImg");
 const imageText = document.getElementById("imageText");
 const step2Button = document.getElementById("step2Button");
 const finalPage = document.getElementById("finalPage");
-const playMusicBtn = document.getElementById("playMusicBtn");
-const finalText = document.getElementById("finalText");
+const finalAudio = document.getElementById("finalAudio");
 
-let sonVideo, leloAudio, malocouilleAudio;
+let sonVideo, leloAudio;
 
 // --- Étape 0 : démarrage ---
 startButton.onclick = () => {
@@ -123,13 +126,6 @@ step2Button.onclick = () => {
   imageScreen.style.display = "none";
   if(leloAudio) leloAudio.pause();
   finalPage.style.display = "flex";
-};
-
-// --- Étape 3 : bouton pour musique finale ---
-playMusicBtn.onclick = () => {
-  malocouilleAudio = new Audio('malocouille.mp3');
-  malocouilleAudio.play().catch(e=>console.log("Erreur malocouille:", e));
-  playMusicBtn.style.display = "none";
 };
 </script>
 </body>
