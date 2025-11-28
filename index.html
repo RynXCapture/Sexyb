@@ -4,76 +4,91 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Surprise 7 mois ❤️</title>
-
 <style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        background: black;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-    }
+body, html {
+    margin: 0; padding: 0;
+    background: black;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
 
-    #startButton, #continueButton {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: black;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2rem;
-        cursor: pointer;
-        z-index: 10;
-    }
+/* VIDEO PLEIN ÉCRAN */
+#video {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
 
-    #video {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        object-fit: cover;
-        z-index: 5;
-    }
+/* ÉTAPE IMAGE + TEXTE + BOUTON */
+#imageScreen {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    color: white;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    font-size: 2rem;
+}
 
-    #imageScreen {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: black;
-        color: white;
-        text-align: center;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 8;
-        font-size: 2rem;
-    }
+#imageScreen img {
+    width: 70vw;
+    max-width: 350px;
+    animation: zoom 10s linear forwards;
+}
 
-    #imageScreen img {
-        width: 70vw;
-        max-width: 350px;
-        animation: zoom 5s infinite linear;
-    }
+#continueButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    display: none;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    background: white;
+    color: black;
+}
 
-    #finalPage {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        padding: 20px;
-        color: white;
-        overflow-y: auto;
-        font-size: 1.2rem;
-        line-height: 1.5;
-    }
+/* ÉTAPE TEXTE FINAL */
+#finalPage {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width: 100vw;
+    height: 100vh;
+    padding: 20px;
+    color: white;
+    overflow-y: auto;
+    font-size: 1.2rem;
+    line-height: 1.5;
+}
 
-    @keyframes zoom {
-        from { transform: scale(1); }
-        to { transform: scale(1.25); }
-    }
+@keyframes zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.5); }
+}
+
+#startButton {
+    position: fixed;
+    top:0; left:0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+}
 </style>
 </head>
 
@@ -85,12 +100,56 @@
 
 <div id="imageScreen" class="flex">
     <img src="lalo.jpg">
-    <div style="margin-top:15px;">Joyeux 7 mois mon ange ❤️</div>
-    <div id="continueButton">Continuer ➜</div>
+    <div>Joyeux 7 mois mon ange ❤️</div>
+    <button id="continueButton">Continuer ➜</button>
 </div>
 
-<div id="finalPage">
-    <p>Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
+<div id="finalPage"></div>
+
+<audio id="lelo" src="lelo.mp3" loop></audio>
+<audio id="finalMusic" src="malocouille.mp3"></audio>
+
+<script>
+const startButton = document.getElementById("startButton");
+const video = document.getElementById("video");
+const imageScreen = document.getElementById("imageScreen");
+const continueButton = document.getElementById("continueButton");
+const finalPage = document.getElementById("finalPage");
+const audio = document.getElementById("lelo");
+const finalMusic = document.getElementById("finalMusic");
+
+// --- ÉTAPE 1 : VIDÉO ---
+startButton.onclick = () => {
+    startButton.style.display = "none";
+    video.src = "lole.mp4";
+    video.style.display = "block";
+    video.muted = false;
+    video.play();
+
+    setTimeout(() => {
+        video.pause();
+        video.style.display = "none";
+
+        // --- ÉTAPE 2 : IMAGE + TEXTE + AUDIO ---
+        imageScreen.style.display = "flex";
+        audio.play();
+
+        // Affiche le bouton après 1 seconde (ou tout de suite si tu veux)
+        setTimeout(() => {
+            continueButton.style.display = "block";
+        }, 500);
+    }, 10000); // 10 secondes
+};
+
+// --- ÉTAPE 3 : PAGE TEXTE + MUSIQUE ---
+continueButton.onclick = () => {
+    imageScreen.style.display = "none";
+    audio.pause();
+    finalPage.style.display = "block";
+    finalMusic.play();
+
+    finalPage.innerHTML = `
+    Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
     Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
     Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.<br><br>
     Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été, à regarder les étoiles à travers tes yeux.<br><br>
@@ -104,48 +163,8 @@
     <strong>Joyeux anniversaire de notre merveilleux couple.</strong><br><br>
     Je t’aime, ton amoureux depuis 7 mois, Aaron.<br>
     💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
-    </p>
-</div>
-
-<audio id="lelo" src="lelo.mp3" loop></audio>
-<audio id="finalMusic" src="malocouille.mp3"></audio>
-
-<script>
-    const startButton = document.getElementById("startButton");
-    const video = document.getElementById("video");
-    const imageScreen = document.getElementById("imageScreen");
-    const continueButton = document.getElementById("continueButton");
-    const finalPage = document.getElementById("finalPage");
-    const audio = document.getElementById("lelo");
-    const finalMusic = document.getElementById("finalMusic");
-
-    // --- ÉTAPE 1 : vidéo ---
-    startButton.onclick = () => {
-        startButton.style.display = "none";
-
-        video.src = "lole.mp4";
-        video.style.display = "block";
-        video.muted = false;
-        video.play();
-
-        setTimeout(() => {
-            video.pause();
-            video.style.display = "none";
-
-            imageScreen.style.display = "flex";
-            audio.play();
-
-        }, 10000);
-    };
-
-    // --- ÉTAPE 2 : passage texte + musique finale ---
-    continueButton.onclick = () => {
-        imageScreen.style.display = "none";
-        finalPage.style.display = "block";
-
-        audio.pause();
-        finalMusic.play();
-    };
+    `;
+};
 </script>
 
 </body>
