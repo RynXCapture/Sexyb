@@ -16,98 +16,67 @@ button {
   background:#ff69b4;
   color:white;
 }
-#startButton, #step1Button, #step2Button, #step3Button {
-  display:flex; justify-content:center; align-items:center; height:100vh;
+.screen {
+  display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column; text-align:center;
 }
-#videoWindow {
-  display:none; margin:20px auto; width:90%; max-width:600px; border:2px solid white; border-radius:10px;
-}
-#imageScreen {
-  display:none;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-#imageScreen img {
-  width:70vw;
-  max-width:350px;
-  transition: transform 5s;
-}
-#imageScreen div {
-  font-size:1.5rem;
-  margin-top:10px;
-  transition: transform 5s, opacity 2s;
-}
-#finalPage {
-  display:none;
-  padding:20px;
-  line-height:1.5;
-  overflow-y:auto;
-  max-height:90vh;
-  text-align:left;
-}
+#videoWindow, #imageScreen, #finalPage {display:none;}
+#imageScreen img {width:70vw; max-width:350px; transition: transform 5s;}
+#imageScreen div {font-size:1.5rem; margin-top:10px; transition: transform 5s, opacity 2s;}
+#finalText {display:none; text-align:left; line-height:1.5; max-height:90vh; overflow-y:auto;}
 </style>
 </head>
 <body>
 
 <!-- Étape 0 : démarrage -->
-<div id="startButton"><button>Commencer la surprise</button></div>
+<div id="startScreen" class="screen">
+  <button id="startButton">Commencer la surprise</button>
+</div>
 
 <!-- Étape 1 : vidéo -->
-<div id="videoWindow">
+<div id="videoWindow" class="screen">
   <video id="video" playsinline muted>
     <source src="lole.mp4" type="video/mp4">
   </video>
-</div>
-<div id="step1Button" style="text-align:center;">
-  <button style="opacity:0; pointer-events:none;">Passer à l'image</button>
+  <button id="step1Button" style="opacity:0; pointer-events:none;">Passer à l'image</button>
 </div>
 
 <!-- Étape 2 : image + son -->
-<div id="imageScreen">
+<div id="imageScreen" class="screen">
   <img src="lalo.jpeg" id="laloImg"><br>
   <div id="imageText" style="opacity:0; transform: scale(0.8);">Joyeux 7 mois mon ange ❤️</div>
   <button id="step2Button" style="display:none;">Passer au texte final</button>
 </div>
 
 <!-- Étape 3 : texte final -->
-<div id="finalPage">
-  <button id="step3Button" style="display:none;">Afficher le texte final</button>
-  <div id="finalText" style="display:none;"></div>
+<div id="finalPage" class="screen">
+  <button id="step3Button">Afficher le texte final et la musique</button>
+  <div id="finalText"></div>
 </div>
 
 <script>
-const startButton = document.querySelector("#startButton button");
-const step1ButtonDiv = document.getElementById("step1Button");
-const step1Button = step1ButtonDiv.querySelector("button");
-const step2Button = document.getElementById("step2Button");
-const step3Button = document.getElementById("step3Button");
+const startButton = document.getElementById("startButton");
 const videoWindow = document.getElementById("videoWindow");
 const video = document.getElementById("video");
+const step1Button = document.getElementById("step1Button");
 const imageScreen = document.getElementById("imageScreen");
 const laloImg = document.getElementById("laloImg");
 const imageText = document.getElementById("imageText");
+const step2Button = document.getElementById("step2Button");
 const finalPage = document.getElementById("finalPage");
+const step3Button = document.getElementById("step3Button");
 const finalText = document.getElementById("finalText");
 
-let sonVideo, leloAudio, malocouilleAudio;
+let sonVideo, leloAudio;
 
 // --- Étape 0 : démarrage ---
 startButton.onclick = () => {
-  startButton.parentElement.style.display = "none";
-  videoWindow.style.display = "block";
+  document.getElementById("startScreen").style.display = "none";
+  videoWindow.style.display = "flex";
 
-  // Vidéo muette
   video.play().catch(e=>console.log("Erreur vidéo:", e));
-
-  // Son séparé
   sonVideo = new Audio('son.mp3');
   sonVideo.play().catch(e=>console.log("Erreur son vidéo:", e));
 
-  // Afficher le bouton après 10 secondes
   setTimeout(() => {
     step1Button.style.opacity = "1";
     step1Button.style.pointerEvents = "auto";
@@ -118,18 +87,13 @@ startButton.onclick = () => {
 step1Button.onclick = () => {
   video.pause();
   if(sonVideo) sonVideo.pause();
-
   videoWindow.style.display = "none";
-  step1ButtonDiv.style.display = "none";
 
-  // Affichage image + texte et son
   imageScreen.style.display = "flex";
-
   leloAudio = new Audio('lelo.mp3');
   leloAudio.loop = true;
   leloAudio.play().catch(e=>console.log("Erreur lelo:", e));
 
-  // Faire apparaître le texte avec zoom
   setTimeout(() => {
     imageText.style.opacity = "1";
     imageText.style.transform = "scale(1.2)";
@@ -141,18 +105,16 @@ step1Button.onclick = () => {
 // --- Étape 2 : image → bouton texte final ---
 step2Button.onclick = () => {
   imageScreen.style.display = "none";
-  step2Button.style.display = "none";
   if(leloAudio) leloAudio.pause();
-
-  finalPage.style.display = "block";
+  finalPage.style.display = "flex";
   step3Button.style.display = "inline-block";
 };
 
-// --- Étape 3 : afficher texte final + son ---
+// --- Étape 3 : afficher texte final + malocouille ---
 step3Button.onclick = () => {
   step3Button.style.display = "none";
 
-  malocouilleAudio = new Audio('malocouille.mp3');
+  let malocouilleAudio = new Audio('malocouille.mp3');
   malocouilleAudio.play().catch(e=>console.log("Erreur malocouille:", e));
 
   finalText.style.display = "block";
@@ -171,7 +133,7 @@ Sur ces petits mots douillets :<br>
 <strong>Joyeux anniversaire de notre merveilleux couple.</strong><br><br>
 Je t’aime, ton amoureux depuis 7 mois, Aaron.<br>
 💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
-`;
+  `;
 };
 </script>
 </body>
