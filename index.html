@@ -7,30 +7,35 @@
 <style>
 html, body {margin:0; padding:0; background:black; overflow:hidden; font-family:Arial,sans-serif;}
 button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font-size:1.5rem;}
-#startButton, #step1Button, #step2Button {position:fixed; top:0; left:0; width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; font-size:2rem; z-index:10; background:black; color:white;}
+#startButton, #step1Button, #step2Button, #step3Button {
+  position:fixed; top:0; left:0; width:100vw; height:100vh;
+  display:flex; justify-content:center; align-items:center;
+  font-size:2rem; z-index:10; background:black; color:white;
+}
 #video {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; object-fit:cover; z-index:5;}
-#imageScreen {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; color:white; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:2rem; z-index:8;}
-#imageScreen img {width:70vw; max-width:350px; transition:transform 10s linear;}
+#imageScreen {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; color:white;
+  display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:2rem; z-index:8;}
+#imageScreen img {width:70vw; max-width:350px;}
 #finalPage {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; padding:20px; color:white; overflow-y:auto; font-size:1.2rem; line-height:1.5;}
 </style>
 </head>
 <body>
 
-<!-- Bouton démarrage -->
-<div id="startButton">👉 Toucher pour commencer</div>
+<!-- Étape 0 : démarrage -->
+<div id="startButton"><button>Commencer la surprise</button></div>
 
-<!-- Vidéo étape 1 -->
+<!-- Étape 1 : vidéo -->
 <video id="video" playsinline></video>
 <div id="step1Button" style="display:none;"><button>Passer à l'image</button></div>
 
-<!-- Étape image + son -->
+<!-- Étape 2 : image + son -->
 <div id="imageScreen">
   <img src="lalo.jpeg" id="laloImg">
   <div>Joyeux 7 mois mon ange ❤️</div>
   <div id="step2Button" style="margin-top:20px; display:none;"><button>Passer au texte final</button></div>
 </div>
 
-<!-- Étape texte final -->
+<!-- Étape 3 : texte final -->
 <div id="finalPage"></div>
 
 <!-- Audios -->
@@ -38,36 +43,37 @@ button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font
 <audio id="malocouille" src="malocouille.mp3"></audio>
 
 <script>
-const startButton = document.getElementById("startButton");
+const startButton = document.querySelector("#startButton button");
+const step1Button = document.querySelector("#step1Button button");
+const step2Button = document.querySelector("#step2Button button");
 const video = document.getElementById("video");
-const step1Button = document.getElementById("step1Button");
 const imageScreen = document.getElementById("imageScreen");
-const step2Button = document.getElementById("step2Button");
-const finalPage = document.getElementById("finalPage");
 const laloImg = document.getElementById("laloImg");
+const finalPage = document.getElementById("finalPage");
 const leloAudio = document.getElementById("lelo");
 const malocouilleAudio = document.getElementById("malocouille");
 
-// --- Démarrage ---
+// --- Étape 0 : démarrage ---
 startButton.onclick = () => {
-  startButton.style.display = "none";
+  document.getElementById("startButton").style.display = "none";
+
+  // Étape 1 : vidéo
   video.src = "lole.mp4";
   video.style.display = "block";
   video.muted = false;
   video.play();
 
-  // Affiche le bouton pour passer à l'image après 10s
-  setTimeout(() => {
-    step1Button.style.display = "flex";
-  }, 10000);
+  // Affiche bouton pour passer à l'image
+  document.getElementById("step1Button").style.display = "flex";
 };
 
-// --- Étape 1 : Vidéo → Image ---
+// --- Étape 1 : vidéo → image ---
 step1Button.onclick = () => {
   video.pause();
   video.style.display = "none";
-  step1Button.style.display = "none";
+  document.getElementById("step1Button").style.display = "none";
 
+  // Étape 2 : image + texte + audio
   imageScreen.style.display = "flex";
   laloImg.style.transform = "scale(1.5)";
 
@@ -76,17 +82,18 @@ step1Button.onclick = () => {
   leloAudio.play().catch(e=>console.log(e));
 
   // Affiche bouton pour passer au texte final
-  step2Button.style.display = "block";
+  document.getElementById("step2Button").style.display = "block";
 };
 
-// --- Étape 2 : Image → Texte final ---
+// --- Étape 2 : image → texte final ---
 step2Button.onclick = () => {
   imageScreen.style.display = "none";
-  step2Button.style.display = "none";
+  document.getElementById("step2Button").style.display = "none";
   leloAudio.pause();
 
   finalPage.style.display = "block";
 
+  // Lancer malocouille.mp3
   malocouilleAudio.currentTime = 0;
   malocouilleAudio.play().catch(e=>console.log(e));
 
@@ -108,6 +115,5 @@ Je t’aime, ton amoureux depuis 7 mois, Aaron.<br>
 `;
 };
 </script>
-
 </body>
 </html>
