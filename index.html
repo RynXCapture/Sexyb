@@ -6,13 +6,49 @@
 <title>Surprise 7 mois ❤️</title>
 <style>
 html, body {margin:0; padding:0; background:black; font-family:Arial,sans-serif; color:white;}
-button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font-size:1.5rem; margin-top:20px;}
-#startButton, #step1Button, #step2Button, #step3Button {display:flex; justify-content:center; align-items:center; height:100vh;}
-#videoWindow {display:none; margin:20px auto; width:90%; max-width:600px; border:2px solid white; border-radius:10px;}
-#imageScreen {display:none; text-align:center;}
-#imageScreen img {width:70vw; max-width:350px; transition: transform 5s;}
-#imageScreen div {font-size:1.5rem; margin-top:10px; transition: transform 5s;}
-#finalPage {display:none; padding:20px; line-height:1.5; overflow-y:auto; max-height:90vh;}
+button {
+  cursor:pointer;
+  border:none;
+  border-radius:10px;
+  padding:15px 25px;
+  font-size:1.5rem;
+  margin-top:20px;
+  background:#ff69b4;
+  color:white;
+}
+#startButton, #step1Button, #step2Button, #step3Button {
+  display:flex; justify-content:center; align-items:center; height:100vh;
+}
+#videoWindow {
+  display:none; margin:20px auto; width:90%; max-width:600px; border:2px solid white; border-radius:10px;
+}
+#imageScreen {
+  display:none;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+#imageScreen img {
+  width:70vw;
+  max-width:350px;
+  transition: transform 5s;
+}
+#imageScreen div {
+  font-size:1.5rem;
+  margin-top:10px;
+  transition: transform 5s, opacity 2s;
+}
+#finalPage {
+  display:none;
+  padding:20px;
+  line-height:1.5;
+  overflow-y:auto;
+  max-height:90vh;
+  text-align:left;
+}
 </style>
 </head>
 <body>
@@ -87,7 +123,7 @@ step1Button.onclick = () => {
   step1ButtonDiv.style.display = "none";
 
   // Affichage image + texte et son
-  imageScreen.style.display = "block";
+  imageScreen.style.display = "flex";
 
   leloAudio = new Audio('lelo.mp3');
   leloAudio.loop = true;
@@ -102,7 +138,7 @@ step1Button.onclick = () => {
   step2Button.style.display = "inline-block";
 };
 
-// --- Étape 2 : image → texte final ---
+// --- Étape 2 : image → bouton texte final ---
 step2Button.onclick = () => {
   imageScreen.style.display = "none";
   step2Button.style.display = "none";
