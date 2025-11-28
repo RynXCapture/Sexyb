@@ -21,7 +21,7 @@ button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font
 
 <!-- Étape 1 : vidéo -->
 <div id="videoWindow">
-  <video id="video" playsinline controls>
+  <video id="video" playsinline muted>
     <source src="lole.mp4" type="video/mp4">
   </video>
 </div>
@@ -47,21 +47,28 @@ const imageScreen = document.getElementById("imageScreen");
 const laloImg = document.getElementById("laloImg");
 const finalPage = document.getElementById("finalPage");
 
-let leloAudio, malocouilleAudio;
+let sonVideo, leloAudio, malocouilleAudio;
 
-// --- Étape 0 : démarrage ---
+// Étape 0 : démarrage
 startButton.onclick = () => {
   document.getElementById("startButton").style.display = "none";
   videoWindow.style.display = "block";
   step1Button.style.display = "block";
+
+  // Lancer la vidéo muette
   video.play().catch(e=>console.log("Erreur vidéo:", e));
+
+  // Lancer le son de la vidéo séparément
+  sonVideo = new Audio('son.mp3');
+  sonVideo.play().catch(e=>console.log("Erreur son vidéo:", e));
 };
 
-// --- Étape 1 : vidéo → image ---
+// Étape 1 : vidéo → image
 step1Button.onclick = () => {
   video.pause();
   videoWindow.style.display = "none";
   step1Button.style.display = "none";
+  if(sonVideo) sonVideo.pause();
 
   // Étape image + son
   imageScreen.style.display = "block";
@@ -74,7 +81,7 @@ step1Button.onclick = () => {
   step2Button.style.display = "inline-block";
 };
 
-// --- Étape 2 : image → texte final ---
+// Étape 2 : image → texte final
 step2Button.onclick = () => {
   imageScreen.style.display = "none";
   step2Button.style.display = "none";
