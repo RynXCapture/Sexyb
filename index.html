@@ -11,40 +11,41 @@ body, html {
     overflow: hidden;
     font-family: Arial, sans-serif;
 }
-
-/* VIDEO PLEIN ÉCRAN */
+#startButton, #continueButton {
+    position: fixed; top:0; left:0;
+    width: 100vw; height: 100vh;
+    display: flex;
+    justify-content: center; align-items: center;
+    background: black; color: white;
+    font-size: 2rem; cursor: pointer;
+    z-index: 10;
+}
 #video {
     display: none;
     position: fixed;
     top:0; left:0;
-    width: 100vw;
-    height: 100vh;
+    width: 100vw; height: 100vh;
     object-fit: cover;
+    z-index:5;
 }
-
-/* ÉTAPE IMAGE + TEXTE + BOUTON */
 #imageScreen {
     display: none;
-    position: fixed;
-    top:0; left:0;
-    width: 100vw;
-    height: 100vh;
+    position: fixed; top:0; left:0;
+    width: 100vw; height: 100vh;
     background: black;
     color: white;
     text-align: center;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 5;
+    z-index: 8;
     font-size: 2rem;
 }
-
 #imageScreen img {
     width: 70vw;
     max-width: 350px;
-    animation: zoom 10s linear forwards;
+    transition: transform 10s linear;
 }
-
 #continueButton {
     margin-top: 20px;
     padding: 10px 20px;
@@ -56,42 +57,18 @@ body, html {
     background: white;
     color: black;
 }
-
-/* ÉTAPE TEXTE FINAL */
 #finalPage {
     display: none;
-    position: fixed;
-    top:0; left:0;
-    width: 100vw;
-    height: 100vh;
+    position: fixed; top:0; left:0;
+    width: 100vw; height: 100vh;
     padding: 20px;
     color: white;
     overflow-y: auto;
     font-size: 1.2rem;
     line-height: 1.5;
 }
-
-@keyframes zoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.5); }
-}
-
-#startButton {
-    position: fixed;
-    top:0; left:0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: black;
-    color: white;
-    font-size: 2rem;
-    cursor: pointer;
-}
 </style>
 </head>
-
 <body>
 
 <div id="startButton">👉 Toucher pour commencer</div>
@@ -99,7 +76,7 @@ body, html {
 <video id="video" playsinline></video>
 
 <div id="imageScreen" class="flex">
-    <img src="lalo.jpg">
+    <img src="lalo.jpg" id="laloImg">
     <div>Joyeux 7 mois mon ange ❤️</div>
     <button id="continueButton">Continuer ➜</button>
 </div>
@@ -117,31 +94,42 @@ const continueButton = document.getElementById("continueButton");
 const finalPage = document.getElementById("finalPage");
 const audio = document.getElementById("lelo");
 const finalMusic = document.getElementById("finalMusic");
+const laloImg = document.getElementById("laloImg");
 
-// --- ÉTAPE 1 : VIDÉO ---
 startButton.onclick = () => {
     startButton.style.display = "none";
+
+    // LANCER VIDEO
     video.src = "lole.mp4";
     video.style.display = "block";
     video.muted = false;
     video.play();
 
+    // COUPER LA VIDEO AU BOUT DE 10s
     setTimeout(() => {
         video.pause();
         video.style.display = "none";
 
-        // --- ÉTAPE 2 : IMAGE + TEXTE + AUDIO ---
+        // --- ÉTAPE IMAGE + TEXTE ---
         imageScreen.style.display = "flex";
-        audio.play();
 
-        // Affiche le bouton après 1 seconde (ou tout de suite si tu veux)
+        // FORCE LE REPAINT POUR iOS
+        void imageScreen.offsetWidth;
+
+        // Zoom de l'image
+        laloImg.style.transform = "scale(1.5)";
+
+        // Lancer audio après que l'écran soit visible
         setTimeout(() => {
-            continueButton.style.display = "block";
-        }, 500);
-    }, 10000); // 10 secondes
+            audio.play();
+        }, 100); // très court délai pour forcer le rendu
+
+        // Affiche le bouton
+        continueButton.style.display = "block";
+    }, 10000);
 };
 
-// --- ÉTAPE 3 : PAGE TEXTE + MUSIQUE ---
+// --- ÉTAPE FINALE ---
 continueButton.onclick = () => {
     imageScreen.style.display = "none";
     audio.pause();
@@ -166,6 +154,5 @@ continueButton.onclick = () => {
     `;
 };
 </script>
-
 </body>
 </html>
