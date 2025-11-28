@@ -2,87 +2,44 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>7 mois ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surprise</title>
 
 <style>
-    body {
+    body, html {
         margin: 0;
-        overflow: hidden;
+        padding: 0;
         background: black;
+        overflow: hidden;
         font-family: Arial, sans-serif;
-        color: white;
     }
 
-    /* VIDEO PLEIN ÉCRAN */
-    #videoContainer {
+    #startButton {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        z-index: 10;
         background: black;
+        color: white;
+        font-size: 2rem;
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
     }
 
-    #loleVideo {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* IMAGE + TEXTE */
-    #photoScreen {
+    #video {
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        overflow: hidden;
-        z-index: 5;
-    }
-
-    #laloImg {
-        width: 100%;
-        height: 100%;
         object-fit: cover;
-        transform: scale(1);
-        transition: transform 10s linear;
     }
 
-    #loveText {
-        position: absolute;
-        font-size: 3vw;
-        text-align: center;
-        font-weight: bold;
-        transform: scale(1);
-        transition: transform 10s linear;
-        color: white;
-        text-shadow: 2px 2px 5px black;
-    }
-
-    #nextBtn {
-        margin-top: 20px;
-        padding: 15px 30px;
-        font-size: 20px;
-        border: none;
-        border-radius: 10px;
-        background: white;
-        color: black;
-        display: none;
-        cursor: pointer;
-    }
-
-    #finalPage {
+    #finalContent {
         display: none;
         position: fixed;
         top: 0;
@@ -91,134 +48,63 @@
         height: 100vh;
         background: black;
         color: white;
-        padding: 30px;
-        font-size: 2vw;
-        overflow-y: auto;
+        text-align: center;
+        font-size: 2rem;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    #finalContent img {
+        width: 70vw;
+        max-width: 350px;
+        margin-bottom: 20px;
     }
 </style>
 </head>
 
 <body>
 
-<!-- VIDEO -->
-<div id="videoContainer">
-    <video id="loleVideo" src="lole.mp4" autoplay muted playsinline webkit-playsinline></video>
+<div id="startButton">👉 Toucher pour lancer la surprise</div>
+
+<video id="video" playsinline></video>
+
+<div id="finalContent">
+    <img src="image.jpg">
+    <div>Je t’aime ❤️</div>
 </div>
 
-<!-- PHOTO + TEXTE -->
-<div id="photoScreen">
-    <img id="laloImg" src="lalo.jpeg">
-    <div id="loveText">Joyeux 7 mois mon ange ❤️</div>
-    <button id="nextBtn">Continuer ❤️</button>
-</div>
-
-<!-- PAGE FINALE -->
-<div id="finalPage"></div>
-
-<!-- AUDIO -->
-<audio id="lelo" src="lelo.mp3"></audio>
-<audio id="malocouille" src="malocouille.mp3"></audio>
+<audio id="lelo" loop src="lelo.mp3"></audio>
 
 <script>
-const video = document.getElementById("loleVideo");
-const videoContainer = document.getElementById("videoContainer");
-const photoScreen = document.getElementById("photoScreen");
-const laloImg = document.getElementById("laloImg");
-const loveText = document.getElementById("loveText");
-const nextBtn = document.getElementById("nextBtn");
+    const startButton = document.getElementById("startButton");
+    const video = document.getElementById("video");
+    const finalContent = document.getElementById("finalContent");
+    const audio = document.getElementById("lelo");
 
-const lelo = document.getElementById("lelo");
-const malocouille = document.getElementById("malocouille");
+    startButton.addEventListener("click", () => {
 
-/* ------------------------------
-   COUPE LA VIDÉO À 9 SECONDES
--------------------------------- */
-const checkVideo = setInterval(() => {
-    if (video.currentTime >= 9) {
-        clearInterval(checkVideo);
-        video.pause();
-        videoContainer.style.display = "none";
-        startPhotoSequence();
-    }
-}, 200);
+        startButton.style.display = "none";
 
-/* ------------------------------
-     AFFICHAGE PHOTO + TEXTE
--------------------------------- */
-function startPhotoSequence() {
-    photoScreen.style.display = "flex";
+        // Lance la vidéo AVEC LE SON
+        video.src = "rickroll.mp4";
+        video.style.display = "block";
+        video.muted = false;
+        video.play();
 
-    // zoom image + texte
-    setTimeout(() => {
-        laloImg.style.transform = "scale(1.5)";
-        loveText.style.transform = "scale(1.5)";
-    }, 100);
-
-    // lancer son en boucle 10s
-    playLeloLoop();
-
-    // afficher bouton après 10s
-    setTimeout(() => {
-        nextBtn.style.display = "block";
-    }, 10000);
-}
-
-/* ------------------------------
-     AUDIO LELO (LOOP 10s)
--------------------------------- */
-function playLeloLoop() {
-    lelo.currentTime = 0;
-    lelo.play();
-
-    const watch = setInterval(() => {
-        if (lelo.currentTime >= 10) {
-            lelo.pause();
-            lelo.currentTime = 0;
-        }
-    }, 100);
-
-    lelo.onpause = () => {
+        // Coupe la vidéo au bout de 10 secondes
         setTimeout(() => {
-            if (photoScreen.style.display === "flex") {
-                playLeloLoop(); // relance
-            }
-        }, 200);
-    };
-}
+            video.pause();
+            video.style.display = "none";
 
-/* ------------------------------
-        PAGE FINALE
--------------------------------- */
-nextBtn.onclick = () => {
-    photoScreen.style.display = "none";
-    finalPage.style.display = "block";
+            // Affiche l'image + texte
+            finalContent.style.display = "flex";
 
-    malocouille.play();
+            // Lance l'audio en boucle
+            audio.play();
 
-    finalPage.innerHTML = `
-    Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!! 
-    Ça fait dé-dé- déjaaaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii 
-    et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!
-
-    Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.
-    Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été,
-    à regarder les étoiles à travers tes yeux.
-
-    Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge.
-    Mon cœur est déverrouillé pour y laisser entrer tout ton amour et aussi et surtout,
-    y enfermer le tien dedans.
-
-    Je t’aime tellement mon ange et même si c’est juste un petit riquiqui texte d’anniversaire,
-    je tiens à toujours te rassurer. Je t’aime et t’aimerai toujours, tu es parfaite.
-
-    Sur ces petits mots douillets :  
-    Joyeux anniversaire de notre merveilleux couple ❤️  
-
-    Je t’aime, ton amoureux depuis 7 mois,  
-    Aaron.  
-    💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
-    `;
-};
+        }, 10000);
+    });
 </script>
 
 </body>
