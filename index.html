@@ -20,9 +20,10 @@ button {
   display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column; text-align:center;
 }
 #videoWindow, #imageScreen, #finalPage {display:none;}
+#videoWindow video {width:90%; max-width:600px; border:2px solid white; border-radius:10px;}
 #imageScreen img {width:70vw; max-width:350px; transition: transform 5s;}
 #imageScreen div {font-size:1.5rem; margin-top:10px; transition: transform 5s, opacity 2s;}
-#finalText {display:none; text-align:left; line-height:1.5; max-height:90vh; overflow-y:auto;}
+#finalText {display:block; text-align:left; line-height:1.5; max-height:70vh; overflow-y:auto; margin-top:20px;}
 </style>
 </head>
 <body>
@@ -49,8 +50,23 @@ button {
 
 <!-- Étape 3 : texte final -->
 <div id="finalPage" class="screen">
-  <button id="step3Button">Afficher le texte final et la musique</button>
-  <div id="finalText"></div>
+  <button id="playMusicBtn">Écouter la musique</button>
+  <div id="finalText">
+    Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
+    Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
+    Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.<br><br>
+    Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été, à regarder les étoiles à travers tes yeux.<br><br>
+    Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge.<br><br>
+    Mon cœur est déverrouillé pour y laisser entrer tout ton amour et aussi et surtout, y enfermer le tien dedans.<br><br>
+    Je t’aime tellement mon ange et même si c’est juste un petit riquiqui texte d’anniversaire, je tiens à toujours te rassurer.<br><br>
+    Je t’aime et t’aimerai toujours, tu es parfaite et n’as aucune lacune. Je suis et serai toujours là pour toi.<br><br>
+    C’est nous, contre les autres mon Ange.<br><br>
+    Tant que je suis dans ma bulle personnelle — notre vie à tous les deux — je ne veux rien d’autre et je ne veux QUE toi ❤️<br><br>
+    Sur ces petits mots douillets :<br>
+    <strong>Joyeux anniversaire de notre merveilleux couple.</strong><br><br>
+    Je t’aime, ton amoureux depuis 7 mois, Aaron.<br>
+    💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
+  </div>
 </div>
 
 <script>
@@ -63,10 +79,10 @@ const laloImg = document.getElementById("laloImg");
 const imageText = document.getElementById("imageText");
 const step2Button = document.getElementById("step2Button");
 const finalPage = document.getElementById("finalPage");
-const step3Button = document.getElementById("step3Button");
+const playMusicBtn = document.getElementById("playMusicBtn");
 const finalText = document.getElementById("finalText");
 
-let sonVideo, leloAudio;
+let sonVideo, leloAudio, malocouilleAudio;
 
 // --- Étape 0 : démarrage ---
 startButton.onclick = () => {
@@ -102,38 +118,18 @@ step1Button.onclick = () => {
   step2Button.style.display = "inline-block";
 };
 
-// --- Étape 2 : image → bouton texte final ---
+// --- Étape 2 : image → texte final ---
 step2Button.onclick = () => {
   imageScreen.style.display = "none";
   if(leloAudio) leloAudio.pause();
   finalPage.style.display = "flex";
-  step3Button.style.display = "inline-block";
 };
 
-// --- Étape 3 : afficher texte final + malocouille ---
-step3Button.onclick = () => {
-  step3Button.style.display = "none";
-
-  let malocouilleAudio = new Audio('malocouille.mp3');
+// --- Étape 3 : bouton pour musique finale ---
+playMusicBtn.onclick = () => {
+  malocouilleAudio = new Audio('malocouille.mp3');
   malocouilleAudio.play().catch(e=>console.log("Erreur malocouille:", e));
-
-  finalText.style.display = "block";
-  finalText.innerHTML = `
-Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
-Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
-Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.<br><br>
-Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été, à regarder les étoiles à travers tes yeux.<br><br>
-Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge.<br><br>
-Mon cœur est déverrouillé pour y laisser entrer tout ton amour et aussi et surtout, y enfermer le tien dedans.<br><br>
-Je t’aime tellement mon ange et même si c’est juste un petit riquiqui texte d’anniversaire, je tiens à toujours te rassurer.<br><br>
-Je t’aime et t’aimerai toujours, tu es parfaite et n’as aucune lacune. Je suis et serai toujours là pour toi.<br><br>
-C’est nous, contre les autres mon Ange.<br><br>
-Tant que je suis dans ma bulle personnelle — notre vie à tous les deux — je ne veux rien d’autre et je ne veux QUE toi ❤️<br><br>
-Sur ces petits mots douillets :<br>
-<strong>Joyeux anniversaire de notre merveilleux couple.</strong><br><br>
-Je t’aime, ton amoureux depuis 7 mois, Aaron.<br>
-💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
-  `;
+  playMusicBtn.style.display = "none";
 };
 </script>
 </body>
