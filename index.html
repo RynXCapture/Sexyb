@@ -25,7 +25,9 @@ button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font
     <source src="lole.mp4" type="video/mp4">
   </video>
 </div>
-<div id="step1Button" style="display:none; text-align:center;"><button>Passer à l'image</button></div>
+<div id="step1Button" style="text-align:center;">
+  <button style="opacity:0; pointer-events:none;">Passer à l'image</button>
+</div>
 
 <!-- Étape 2 : image + son -->
 <div id="imageScreen">
@@ -40,7 +42,7 @@ button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font
 <script>
 const startButton = document.querySelector("#startButton button");
 const step1ButtonDiv = document.getElementById("step1Button");
-const step1Button = document.querySelector("#step1Button button");
+const step1Button = step1ButtonDiv.querySelector("button");
 const step2Button = document.getElementById("step2Button");
 const videoWindow = document.getElementById("videoWindow");
 const video = document.getElementById("video");
@@ -64,7 +66,8 @@ startButton.onclick = () => {
 
   // Afficher le bouton automatiquement après 10 secondes
   setTimeout(() => {
-    step1ButtonDiv.style.display = "flex";
+    step1Button.style.opacity = "1";
+    step1Button.style.pointerEvents = "auto";
   }, 10000);
 };
 
