@@ -39,6 +39,7 @@ button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font
 
 <script>
 const startButton = document.querySelector("#startButton button");
+const step1ButtonDiv = document.getElementById("step1Button");
 const step1Button = document.querySelector("#step1Button button");
 const step2Button = document.getElementById("step2Button");
 const videoWindow = document.getElementById("videoWindow");
@@ -49,28 +50,34 @@ const finalPage = document.getElementById("finalPage");
 
 let sonVideo, leloAudio, malocouilleAudio;
 
-// Étape 0 : démarrage
+// --- Étape 0 : démarrage ---
 startButton.onclick = () => {
   document.getElementById("startButton").style.display = "none";
   videoWindow.style.display = "block";
-  step1Button.style.display = "block";
 
   // Lancer la vidéo muette
   video.play().catch(e=>console.log("Erreur vidéo:", e));
 
-  // Lancer le son de la vidéo séparément
+  // Lancer le son séparé
   sonVideo = new Audio('son.mp3');
   sonVideo.play().catch(e=>console.log("Erreur son vidéo:", e));
+
+  // Afficher le bouton automatiquement après 10 secondes
+  setTimeout(() => {
+    step1ButtonDiv.style.display = "flex";
+  }, 10000);
 };
 
-// Étape 1 : vidéo → image
+// --- Étape 1 : vidéo → image ---
 step1Button.onclick = () => {
+  // Stopper vidéo et son
   video.pause();
-  videoWindow.style.display = "none";
-  step1Button.style.display = "none";
   if(sonVideo) sonVideo.pause();
 
-  // Étape image + son
+  videoWindow.style.display = "none";
+  step1ButtonDiv.style.display = "none";
+
+  // Étape image + son lelo
   imageScreen.style.display = "block";
   laloImg.style.transform = "scale(1.2)";
 
@@ -81,7 +88,7 @@ step1Button.onclick = () => {
   step2Button.style.display = "inline-block";
 };
 
-// Étape 2 : image → texte final
+// --- Étape 2 : image → texte final ---
 step2Button.onclick = () => {
   imageScreen.style.display = "none";
   step2Button.style.display = "none";
