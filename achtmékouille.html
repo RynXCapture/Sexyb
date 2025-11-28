@@ -1,0 +1,351 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Surprise -- 7 mois</title>
+<style>
+  :root { --bg:#0b0b0b; --fg:#fff; --accent:#ff6b9a; }
+  html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:var(--fg); }
+  .screen { display:none; width:100%; height:100%; align-items:center; justify-content:center; position:relative; padding:20px; box-sizing:border-box; }
+  .active { display:flex; }
+  .center { text-align:center; }
+  button {
+    background:var(--accent); color:#111; border:0; padding:12px 20px; border-radius:10px; font-weight:700; cursor:pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+
+  /* VIDEO area */
+  .video-wrap { width:100%; max-width:1100px; height:60vh; background:#000; position:relative; overflow:hidden; border-radius:12px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+  video { width:100%; height:100%; object-fit:cover; display:block; background:#000; }
+
+  /* overlay image & text */
+  .overlay {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;
+  }
+  .photo {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0;
+    transition:opacity 600ms ease;
+  }
+  .photo img { max-width:120%; max-height:120%; transform-origin:center center; transition:transform 6000ms cubic-bezier(.2,.9,.3,1); will-change:transform; }
+
+  .photo.show { opacity:1; }
+  .caption {
+    position:absolute; z-index:4; pointer-events:none; text-align:center;
+    font-size:clamp(22px, 6vw, 56px); font-weight:800; letter-spacing:1px;
+    color: #fff; text-shadow: 0 6px 30px rgba(0,0,0,0.7);
+    transform-origin:center center; opacity:0; transition:transform 6000ms cubic-bezier(.2,.9,.3,1), opacity 600ms;
+  }
+  .caption.show { opacity:1; }
+
+  .controls { margin-top:18px; display:flex; gap:12px; justify-content:center; }
+
+  /* second screen */
+  .page2 { flex-direction:column; align-items:flex-start; gap:18px; padding:28px; overflow:auto; }
+  .text-block {
+    background:rgba(255,255,255,0.05); padding:22px; border-radius:12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6); font-size:18px; line-height:1.45; white-space:pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1 -->
+<main id="screen1" class="screen active center">
+  <div style="max-width:1100px; width:100%;">
+    <h1>Surprise -- Clique pour commencer</h1>
+    <button id="startBtn">Lancer la surprise</button>
+
+    <div style="height:20px"></div>
+
+    <div class="video-wrap" id="videoWrap">
+      <video id="video" preload="auto" playsinline webkit-playsinline muted>
+        <source src="lole.mp4" type="video/mp4">
+      </video>
+
+      <div class="overlay">
+        <div id="photoBlock" class="photo">
+          <img id="photo" src="lalo.jpeg" alt="">
+        </div>
+
+        <div id="caption" class="caption">joyeux 7 mois mon ange</div>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+
+    <button id="nextBtn" style="display:none">Suivant →</button>
+  </div>
+</main>
+
+<!-- SCREEN 2 -->
+<section id="screen2" class="screen page2">
+  <div style="max-width:1100px;">
+    <h2>Suite de la surprise 💗</h2>
+
+    <div class="text-block">
+Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!! Ça fait dé-dé- déjaaaaaa 7 moiiiiis qu'on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!! Je t'aime tellement mon ange, ces 7 mois à tes côtés n'ont été que pur bonheur et fantaisie. Tu est la personne avec qui je veux juste être tranquille, posé sur de l'herbe un soir d'été, à regarder les etoiles à travers tes yeux. Je t'aime tellement tellement tellement énormément beaucoup mon annnnnge. Mon cœur est déverrouillé pour y laisser entrer tout ton amour et aussi et surtout, y enfermer le tien dedans. Je t'aime tellement mon ange et même si c'est juste un petit riquiqui texte d'anniversaire, je tiens à toujours te rassurer. Je t'aime et t'aimerai toujours, tu est parfaite et n'a aucune lacune, je suis et serais toujours là pour toi et surtout. C'est nous, contre les autres mon Ange. Tant que je suis dans ma bulle personnelle, c'est à dire notre vie à tout les deux, je ne veux rien d'autre et je ne veux que toi (bon c'est déjà le cas mais tia capté). Sur ces petits mots douillets, je te souhaite donc à nouveau un joyeux anniversaire de notre merveilleux couple.
+Je t'aime, ton amoureux depuis 7 mois, Aaron.
+💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
+    </div>
+  </div>
+</section>
+
+<!-- Audio elements -->
+<audio id="leloAudio" src="lelo.mp3" preload="auto"></audio>
+<audio id="malocAudio" src="malocouille.mp3" preload="auto"></audio>
+
+<script>
+const screen1 = document.getElementById("screen1");
+const screen2 = document.getElementById("screen2");
+const startBtn = document.getElementById("startBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+const video = document.getElementById("video");
+const photoBlock = document.getElementById("photoBlock");
+const photo = document.getElementById("photo");
+const caption = document.getElementById("caption");
+
+const lelo = document.getElementById("leloAudio");
+const maloc = document.getElementById("malocAudio");
+
+let started = false;
+
+// Fonction : lire lelo.mp3, arrêter à 10s, relancer en boucle
+function playLeloLoop() {
+    lelo.currentTime = 0;
+    lelo.play();
+
+    const checkStop = setInterval(() => {
+        if (lelo.currentTime >= 10) {
+            lelo.pause();
+            lelo.currentTime = 0;
+        }
+    }, 100);
+
+    lelo.onpause = () => {
+        setTimeout(() => {
+            if (screen1.classList.contains("active")) {
+                playLeloLoop();
+            }
+        }, 150);
+    };
+}
+
+// --- Début de la surprise ---
+startBtn.addEventListener("click", async () => {
+    if (started) return;
+    started = true;
+
+    video.muted = false;
+    await video.play().catch(() => {});
+
+    // Vérifier toutes les 200ms
+    const interval = setInterval(() => {
+        if (video.currentTime >= 9) {
+            clearInterval(interval);
+            video.pause();
+
+            // Afficher la photo + zoom
+            photoBlock.classList.add("show");
+            caption.classList.add("show");
+            setTimeout(() => {
+                photo.style.transform = "scale(1.35)";
+                caption.style.transform = "scale(1.35)";
+            }, 50);
+
+            // Jouer le son (10s + boucle infinie)
+            playLeloLoop();
+
+            // Activer bouton suivant
+            nextBtn.style.display = "inline-block";
+        }
+    }, 200);
+});
+
+// --- Passer à la page suivante ---
+nextBtn.addEventListener("click", () => {
+    screen1.classList.remove("active");
+    screen2.classList.add("active");
+
+    // Démarrer la musique
+    maloc.play().catch(() => {});
+});
+</script>
+</body>
+</html<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Surprise — 7 mois</title>
+<style>
+  :root { --bg:#0b0b0b; --fg:#fff; --accent:#ff6b9a; }
+  html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:var(--fg); }
+  .screen { display:none; width:100%; height:100%; align-items:center; justify-content:center; position:relative; padding:20px; box-sizing:border-box; }
+  .active { display:flex; }
+  .center { text-align:center; }
+  button {
+    background:var(--accent); color:#111; border:0; padding:12px 20px; border-radius:10px; font-weight:700; cursor:pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+
+  /* VIDEO area */
+  .video-wrap { width:100%; max-width:1100px; height:60vh; background:#000; position:relative; overflow:hidden; border-radius:12px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+  video { width:100%; height:100%; object-fit:cover; display:block; background:#000; }
+
+  /* overlay image & text */
+  .overlay {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;
+  }
+  .photo {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0;
+    transition:opacity 600ms ease;
+  }
+  .photo img { max-width:120%; max-height:120%; transform-origin:center center; transition:transform 6000ms cubic-bezier(.2,.9,.3,1); will-change:transform; }
+
+  .photo.show { opacity:1; }
+  .caption {
+    position:absolute; z-index:4; pointer-events:none; text-align:center;
+    font-size:clamp(22px, 6vw, 56px); font-weight:800; letter-spacing:1px;
+    color: #fff; text-shadow: 0 6px 30px rgba(0,0,0,0.7);
+    transform-origin:center center; opacity:0; transition:transform 6000ms cubic-bezier(.2,.9,.3,1), opacity 600ms;
+  }
+  .caption.show { opacity:1; }
+
+  .controls { margin-top:18px; display:flex; gap:12px; justify-content:center; }
+
+  /* second screen */
+  .page2 { flex-direction:column; align-items:flex-start; gap:18px; padding:28px; overflow:auto; }
+  .text-block {
+    background:rgba(255,255,255,0.05); padding:22px; border-radius:12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6); font-size:18px; line-height:1.45; white-space:pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1 -->
+<main id="screen1" class="screen active center">
+  <div style="max-width:1100px; width:100%;">
+    <h1>Surprise — Clique pour commencer</h1>
+    <button id="startBtn">Lancer la surprise</button>
+
+    <div style="height:20px"></div>
+
+    <div class="video-wrap" id="videoWrap">
+      <video id="video" preload="auto" playsinline webkit-playsinline muted>
+        <source src="lole.mp4" type="video/mp4">
+      </video>
+
+      <div class="overlay">
+        <div id="photoBlock" class="photo">
+          <img id="photo" src="lalo.jpeg" alt="">
+        </div>
+
+        <div id="caption" class="caption">joyeux 7 mois mon ange</div>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+
+    <button id="nextBtn" style="display:none">Suivant →</button>
+  </div>
+</main>
+
+<!-- SCREEN 2 -->
+<section id="screen2" class="screen page2">
+  <div style="max-width:1100px;">
+    <h2>Suite de la surprise 💗</h2>
+
+    <div class="text-block">
+Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!! Ça fait dé-dé- déjaaaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!! Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie. Tu est la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été, à regarder les etoiles à travers tes yeux. Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge. Mon cœur est déverrouillé pour y laisser entrer tout ton amour et aussi et surtout, y enfermer le tien dedans. Je t’aime tellement mon ange et même si c’est juste un petit riquiqui texte d’anniversaire, je tiens à toujours te rassurer. Je t’aime et t’aimerai toujours, tu est parfaite et n’a aucune lacune, je suis et serais toujours là pour toi et surtout. C’est nous, contre les autres mon Ange. Tant que je suis dans ma bulle personnelle, c’est à dire notre vie à tout les deux, je ne veux rien d’autre et je ne veux que toi (bon c’est déjà le cas mais tia capté). Sur ces petits mots douillets, je te souhaite donc à nouveau un joyeux anniversaire de notre merveilleux couple.
+Je t’aime, ton amoureux depuis 7 mois, Aaron.
+💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
+    </div>
+  </div>
+</section>
+
+<!-- Audio elements -->
+<audio id="leloAudio" src="lelo.mp3" preload="auto"></audio>
+<audio id="malocAudio" src="malocouille.mp3" preload="auto"></audio>
+
+<script>
+const screen1 = document.getElementById("screen1");
+const screen2 = document.getElementById("screen2");
+const startBtn = document.getElementById("startBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+const video = document.getElementById("video");
+const photoBlock = document.getElementById("photoBlock");
+const photo = document.getElementById("photo");
+const caption = document.getElementById("caption");
+
+const lelo = document.getElementById("leloAudio");
+const maloc = document.getElementById("malocAudio");
+
+let started = false;
+
+// Fonction : lire lelo.mp3, arrêter à 10s, relancer en boucle
+function playLeloLoop() {
+    lelo.currentTime = 0;
+    lelo.play();
+
+    const checkStop = setInterval(() => {
+        if (lelo.currentTime >= 10) {
+            lelo.pause();
+            lelo.currentTime = 0;
+        }
+    }, 100);
+
+    lelo.onpause = () => {
+        setTimeout(() => {
+            if (screen1.classList.contains("active")) {
+                playLeloLoop();
+            }
+        }, 150);
+    };
+}
+
+// --- Début de la surprise ---
+startBtn.addEventListener("click", async () => {
+    if (started) return;
+    started = true;
+
+    video.muted = false;
+    await video.play().catch(() => {});
+
+    // Vérifier toutes les 200ms
+    const interval = setInterval(() => {
+        if (video.currentTime >= 9) {
+            clearInterval(interval);
+            video.pause();
+
+            // Afficher la photo + zoom
+            photoBlock.classList.add("show");
+            caption.classList.add("show");
+            setTimeout(() => {
+                photo.style.transform = "scale(1.35)";
+                caption.style.transform = "scale(1.35)";
+            }, 50);
+
+            // Jouer le son (10s + boucle infinie)
+            playLeloLoop();
+
+            // Activer bouton suivant
+            nextBtn.style.display = "inline-block";
+        }
+    }, 200);
+});
+
+// --- Passer à la page suivante ---
+nextBtn.addEventListener("click", () => {
+    screen1.classList.remove("active");
+    screen2.classList.add("active");
+
+    // Démarrer la musique
+    maloc.play().catch(() => {});
+});
+</script>
+</body>
+</html>>
