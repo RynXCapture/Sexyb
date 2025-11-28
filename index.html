@@ -5,26 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Surprise 7 mois ❤️</title>
 <style>
-body, html {
+html, body {
     margin:0; padding:0;
     background:black;
     overflow:hidden;
     font-family: Arial, sans-serif;
 }
-
-/* bouton de démarrage */
 #startButton {
     position: fixed; top:0; left:0;
     width:100vw; height:100vh;
-    display:flex;
-    justify-content:center; align-items:center;
+    display:flex; justify-content:center; align-items:center;
     background:black; color:white;
-    font-size:2rem;
-    cursor:pointer;
+    font-size:2rem; cursor:pointer;
     z-index:10;
 }
-
-/* vidéo plein écran */
 #video {
     display:none;
     position:fixed; top:0; left:0;
@@ -32,8 +26,6 @@ body, html {
     object-fit:cover;
     z-index:5;
 }
-
-/* écran image + bouton */
 #imageScreen {
     display:none;
     position:fixed; top:0; left:0;
@@ -45,13 +37,10 @@ body, html {
     font-size:2rem;
     z-index:8;
 }
-
 #imageScreen img {
     width:70vw;
     max-width:350px;
-    transition: transform 10s linear;
 }
-
 #continueButton {
     margin-top:20px;
     padding:10px 20px;
@@ -63,8 +52,6 @@ body, html {
     background:white;
     color:black;
 }
-
-/* texte final */
 #finalPage {
     display:none;
     position:fixed; top:0; left:0;
@@ -77,7 +64,6 @@ body, html {
 }
 </style>
 </head>
-
 <body>
 
 <div id="startButton">👉 Toucher pour commencer</div>
@@ -105,50 +91,44 @@ const laloImg = document.getElementById("laloImg");
 const leloAudio = document.getElementById("lelo");
 const malocouilleAudio = document.getElementById("malocouille");
 
-// --- ETAPE 1 : démarrage ---
+// ETAPE 0 : démarrage interactif
 startButton.onclick = () => {
     startButton.style.display = "none";
 
-    // Lancer vidéo
+    // ETAPE 1 : VIDEO
     video.src = "lole.mp4";
     video.style.display = "block";
-    video.muted = false;
+    video.muted = false; // vidéo avec son
     video.play();
 
-    // Au bout de 10s on passe à l'image
+    // Après 10s, passer à l'image
     setTimeout(() => {
         video.pause();
         video.style.display = "none";
 
-        // --- ETAPE 2 : image + texte + son lelo ---
+        // ETAPE 2 : IMAGE + TEXTE + AUDIO
         imageScreen.style.display = "flex";
 
-        // force repaint pour iOS
-        void imageScreen.offsetWidth;
-
-        // zoom image
-        laloImg.style.transform = "scale(1.5)";
-
-        // lancer lelo.mp3
-        leloAudio.currentTime = 0;
-        leloAudio.play();
-
-        // afficher bouton après 0.5s
+        // Lancer lelo.mp3 après que l'image soit visible
         setTimeout(() => {
-            continueButton.style.display = "block";
-        }, 500);
+            leloAudio.currentTime = 0;
+            leloAudio.play().catch(e => console.log("Erreur audio:", e));
+        }, 50);
+
+        // Afficher bouton pour continuer
+        continueButton.style.display = "block";
 
     }, 10000);
 };
 
-// --- ETAPE 3 : bouton vers texte final ---
+// ETAPE 3 : TEXTE FINAL + MUSIQUE
 continueButton.onclick = () => {
     imageScreen.style.display = "none";
     leloAudio.pause();
     finalPage.style.display = "block";
 
     malocouilleAudio.currentTime = 0;
-    malocouilleAudio.play();
+    malocouilleAudio.play().catch(e => console.log("Erreur audio:", e));
 
     finalPage.innerHTML = `
     Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
