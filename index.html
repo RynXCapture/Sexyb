@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>7 mois ❤️</title>
+
 <style>
     body {
         margin: 0;
@@ -27,8 +28,11 @@
     }
 
     #loleVideo {
-        width: 100vw;
-        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
     }
 
@@ -58,16 +62,17 @@
     #loveText {
         position: absolute;
         font-size: 3vw;
-        font-weight: bold;
         text-align: center;
+        font-weight: bold;
         transform: scale(1);
         transition: transform 10s linear;
+        color: white;
+        text-shadow: 2px 2px 5px black;
     }
 
-    /* BOUTON POUR PASSER À LA PAGE 2 */
     #nextBtn {
         margin-top: 20px;
-        padding: 15px 25px;
+        padding: 15px 30px;
         font-size: 20px;
         border: none;
         border-radius: 10px;
@@ -77,7 +82,6 @@
         cursor: pointer;
     }
 
-    /* PAGE FINALE */
     #finalPage {
         display: none;
         position: fixed;
@@ -93,14 +97,15 @@
     }
 </style>
 </head>
+
 <body>
 
-<!-- VIDEO PLEIN ÉCRAN -->
+<!-- VIDEO -->
 <div id="videoContainer">
-    <video id="loleVideo" src="lole.mp4" autoplay></video>
+    <video id="loleVideo" src="lole.mp4" autoplay muted playsinline webkit-playsinline></video>
 </div>
 
-<!-- IMAGE + TEXTE -->
+<!-- PHOTO + TEXTE -->
 <div id="photoScreen">
     <img id="laloImg" src="lalo.jpeg">
     <div id="loveText">Joyeux 7 mois mon ange ❤️</div>
@@ -110,13 +115,11 @@
 <!-- PAGE FINALE -->
 <div id="finalPage"></div>
 
+<!-- AUDIO -->
 <audio id="lelo" src="lelo.mp3"></audio>
 <audio id="malocouille" src="malocouille.mp3"></audio>
 
 <script>
-// -------------------------
-// STOP VIDEO À 9 SECONDES
-// -------------------------
 const video = document.getElementById("loleVideo");
 const videoContainer = document.getElementById("videoContainer");
 const photoScreen = document.getElementById("photoScreen");
@@ -127,38 +130,42 @@ const nextBtn = document.getElementById("nextBtn");
 const lelo = document.getElementById("lelo");
 const malocouille = document.getElementById("malocouille");
 
-video.ontimeupdate = () => {
+/* ------------------------------
+   COUPE LA VIDÉO À 9 SECONDES
+-------------------------------- */
+const checkVideo = setInterval(() => {
     if (video.currentTime >= 9) {
+        clearInterval(checkVideo);
         video.pause();
-        videoContainer.style.display = "none";   // ➜ DISPARAÎT
+        videoContainer.style.display = "none";
         startPhotoSequence();
     }
-};
+}, 200);
 
-// -------------------------
-// DÉBUT PHOTO + TEXTE + AUDIO
-// -------------------------
+/* ------------------------------
+     AFFICHAGE PHOTO + TEXTE
+-------------------------------- */
 function startPhotoSequence() {
     photoScreen.style.display = "flex";
 
-    // ZOOM image + texte
+    // zoom image + texte
     setTimeout(() => {
         laloImg.style.transform = "scale(1.5)";
         loveText.style.transform = "scale(1.5)";
     }, 100);
 
-    // Lancer le son en boucle 10s
+    // lancer son en boucle 10s
     playLeloLoop();
 
-    // Afficher bouton après 10 secondes
+    // afficher bouton après 10s
     setTimeout(() => {
         nextBtn.style.display = "block";
     }, 10000);
 }
 
-// -------------------------
-// AUDIO lelo.mp3 STOP À 10s + LOOP
-// -------------------------
+/* ------------------------------
+     AUDIO LELO (LOOP 10s)
+-------------------------------- */
 function playLeloLoop() {
     lelo.currentTime = 0;
     lelo.play();
@@ -173,15 +180,15 @@ function playLeloLoop() {
     lelo.onpause = () => {
         setTimeout(() => {
             if (photoScreen.style.display === "flex") {
-                playLeloLoop();
+                playLeloLoop(); // relance
             }
         }, 200);
     };
 }
 
-// -------------------------
-// PAGE FINALE + MUSIQUE
-// -------------------------
+/* ------------------------------
+        PAGE FINALE
+-------------------------------- */
 nextBtn.onclick = () => {
     photoScreen.style.display = "none";
     finalPage.style.display = "block";
@@ -194,7 +201,7 @@ nextBtn.onclick = () => {
     et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!
 
     Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.
-    Tu est la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été,
+    Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été,
     à regarder les étoiles à travers tes yeux.
 
     Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge.
