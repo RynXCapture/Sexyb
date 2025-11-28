@@ -5,147 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Surprise 7 mois ❤️</title>
 <style>
-html, body {
-    margin:0; padding:0;
-    background:black;
-    overflow:hidden;
-    font-family: Arial, sans-serif;
-}
-#startButton {
-    position: fixed; top:0; left:0;
-    width:100vw; height:100vh;
-    display:flex; justify-content:center; align-items:center;
-    background:black; color:white;
-    font-size:2rem; cursor:pointer;
-    z-index:10;
-}
-#video {
-    display:none;
-    position:fixed; top:0; left:0;
-    width:100vw; height:100vh;
-    object-fit:cover;
-    z-index:5;
-}
-#imageScreen {
-    display:none;
-    position:fixed; top:0; left:0;
-    width:100vw; height:100vh;
-    background:black;
-    color:white;
-    display:flex; flex-direction:column;
-    justify-content:center; align-items:center;
-    font-size:2rem;
-    z-index:8;
-}
-#imageScreen img {
-    width:70vw;
-    max-width:350px;
-}
-#continueButton {
-    margin-top:20px;
-    padding:10px 20px;
-    font-size:1.5rem;
-    display:none;
-    cursor:pointer;
-    border-radius:10px;
-    border:none;
-    background:white;
-    color:black;
-}
-#finalPage {
-    display:none;
-    position:fixed; top:0; left:0;
-    width:100vw; height:100vh;
-    padding:20px;
-    color:white;
-    overflow-y:auto;
-    font-size:1.2rem;
-    line-height:1.5;
-}
+html, body {margin:0; padding:0; background:black; overflow:hidden; font-family:Arial,sans-serif;}
+button {cursor:pointer; border:none; border-radius:10px; padding:10px 20px; font-size:1.5rem;}
+#startButton, #step1Button, #step2Button {position:fixed; top:0; left:0; width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; font-size:2rem; z-index:10; background:black; color:white;}
+#video {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; object-fit:cover; z-index:5;}
+#imageScreen {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; color:white; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:2rem; z-index:8;}
+#imageScreen img {width:70vw; max-width:350px; transition:transform 10s linear;}
+#finalPage {display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; padding:20px; color:white; overflow-y:auto; font-size:1.2rem; line-height:1.5;}
 </style>
 </head>
 <body>
 
+<!-- Bouton démarrage -->
 <div id="startButton">👉 Toucher pour commencer</div>
 
+<!-- Vidéo étape 1 -->
 <video id="video" playsinline></video>
+<div id="step1Button" style="display:none;"><button>Passer à l'image</button></div>
 
+<!-- Étape image + son -->
 <div id="imageScreen">
-    <img src="lalo.jpeg" id="laloImg">
-    <div>Joyeux 7 mois mon ange ❤️</div>
-    <button id="continueButton">Continuer ➜</button>
+  <img src="lalo.jpeg" id="laloImg">
+  <div>Joyeux 7 mois mon ange ❤️</div>
+  <div id="step2Button" style="margin-top:20px; display:none;"><button>Passer au texte final</button></div>
 </div>
 
+<!-- Étape texte final -->
 <div id="finalPage"></div>
 
+<!-- Audios -->
 <audio id="lelo" src="lelo.mp3" loop></audio>
 <audio id="malocouille" src="malocouille.mp3"></audio>
 
 <script>
 const startButton = document.getElementById("startButton");
 const video = document.getElementById("video");
+const step1Button = document.getElementById("step1Button");
 const imageScreen = document.getElementById("imageScreen");
-const continueButton = document.getElementById("continueButton");
+const step2Button = document.getElementById("step2Button");
 const finalPage = document.getElementById("finalPage");
 const laloImg = document.getElementById("laloImg");
 const leloAudio = document.getElementById("lelo");
 const malocouilleAudio = document.getElementById("malocouille");
 
-// ETAPE 0 : démarrage interactif
+// --- Démarrage ---
 startButton.onclick = () => {
-    startButton.style.display = "none";
+  startButton.style.display = "none";
+  video.src = "lole.mp4";
+  video.style.display = "block";
+  video.muted = false;
+  video.play();
 
-    // ETAPE 1 : VIDEO
-    video.src = "lole.mp4";
-    video.style.display = "block";
-    video.muted = false; // vidéo avec son
-    video.play();
-
-    // Après 10s, passer à l'image
-    setTimeout(() => {
-        video.pause();
-        video.style.display = "none";
-
-        // ETAPE 2 : IMAGE + TEXTE + AUDIO
-        imageScreen.style.display = "flex";
-
-        // Lancer lelo.mp3 après que l'image soit visible
-        setTimeout(() => {
-            leloAudio.currentTime = 0;
-            leloAudio.play().catch(e => console.log("Erreur audio:", e));
-        }, 50);
-
-        // Afficher bouton pour continuer
-        continueButton.style.display = "block";
-
-    }, 10000);
+  // Affiche le bouton pour passer à l'image après 10s
+  setTimeout(() => {
+    step1Button.style.display = "flex";
+  }, 10000);
 };
 
-// ETAPE 3 : TEXTE FINAL + MUSIQUE
-continueButton.onclick = () => {
-    imageScreen.style.display = "none";
-    leloAudio.pause();
-    finalPage.style.display = "block";
+// --- Étape 1 : Vidéo → Image ---
+step1Button.onclick = () => {
+  video.pause();
+  video.style.display = "none";
+  step1Button.style.display = "none";
 
-    malocouilleAudio.currentTime = 0;
-    malocouilleAudio.play().catch(e => console.log("Erreur audio:", e));
+  imageScreen.style.display = "flex";
+  laloImg.style.transform = "scale(1.5)";
 
-    finalPage.innerHTML = `
-    Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
-    Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
-    Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.<br><br>
-    Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été, à regarder les étoiles à travers tes yeux.<br><br>
-    Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge.<br><br>
-    Mon cœur est déverrouillé pour y laisser entrer tout ton amour et aussi et surtout, y enfermer le tien dedans.<br><br>
-    Je t’aime tellement mon ange et même si c’est juste un petit riquiqui texte d’anniversaire, je tiens à toujours te rassurer.<br><br>
-    Je t’aime et t’aimerai toujours, tu es parfaite et n’as aucune lacune. Je suis et serai toujours là pour toi.<br><br>
-    C’est nous, contre les autres mon Ange.<br><br>
-    Tant que je suis dans ma bulle personnelle — notre vie à tous les deux — je ne veux rien d’autre et je ne veux QUE toi ❤️<br><br>
-    Sur ces petits mots douillets :<br>
-    <strong>Joyeux anniversaire de notre merveilleux couple.</strong><br><br>
-    Je t’aime, ton amoureux depuis 7 mois, Aaron.<br>
-    💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
-    `;
+  // Lancer lelo.mp3
+  leloAudio.currentTime = 0;
+  leloAudio.play().catch(e=>console.log(e));
+
+  // Affiche bouton pour passer au texte final
+  step2Button.style.display = "block";
+};
+
+// --- Étape 2 : Image → Texte final ---
+step2Button.onclick = () => {
+  imageScreen.style.display = "none";
+  step2Button.style.display = "none";
+  leloAudio.pause();
+
+  finalPage.style.display = "block";
+
+  malocouilleAudio.currentTime = 0;
+  malocouilleAudio.play().catch(e=>console.log(e));
+
+  finalPage.innerHTML = `
+Bon anniversaire de nos 7 moiiiiiis mon petit bébé !!!!!!<br><br>
+Ça fait dé-dé-déjàaaaa 7 moiiiiis qu’on est ensemmmmble ouiiiiii et-et ce sera riennnnn comparé à notre vie toute entièèèèèèreeeeee !!!!!!!!<br><br>
+Je t’aime tellement mon ange, ces 7 mois à tes côtés n’ont été que pur bonheur et fantaisie.<br><br>
+Tu es la personne avec qui je veux juste être tranquille, posé sur de l’herbe un soir d’été, à regarder les étoiles à travers tes yeux.<br><br>
+Je t’aime tellement tellement tellement énormément beaucoup mon annnnnge.<br><br>
+Mon cœur est déverrouillé pour y laisser entrer tout ton amour et aussi et surtout, y enfermer le tien dedans.<br><br>
+Je t’aime tellement mon ange et même si c’est juste un petit riquiqui texte d’anniversaire, je tiens à toujours te rassurer.<br><br>
+Je t’aime et t’aimerai toujours, tu es parfaite et n’as aucune lacune. Je suis et serai toujours là pour toi.<br><br>
+C’est nous, contre les autres mon Ange.<br><br>
+Tant que je suis dans ma bulle personnelle — notre vie à tous les deux — je ne veux rien d’autre et je ne veux QUE toi ❤️<br><br>
+Sur ces petits mots douillets :<br>
+<strong>Joyeux anniversaire de notre merveilleux couple.</strong><br><br>
+Je t’aime, ton amoureux depuis 7 mois, Aaron.<br>
+💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗
+`;
 };
 </script>
 
